@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>凡人修仙传-供刘师兄消遣</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2461, #1e3799);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            grid-gap: 20px;
+        }
+        
+        header {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #4a69bd;
+        }
+        
+        h1 {
+            color: #f6b93b;
+            text-shadow: 0 0 10px rgba(246, 185, 59, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        .panel {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #4a69bd;
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.3);
+        }
+        
+        .panel h2 {
+            color: #f6b93b;
+            border-bottom: 1px solid #4a69bd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .character-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #4a69bd, #1e3799);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #f6b93b;
+            overflow: hidden;
+        }
+        
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .stats {
+            width: 100%;
+        }
+        
+        .stat {
+            margin-bottom: 10px;
+        }
+        
+        .stat label {
+            display: block;
+            margin-bottom: 5px;
+            color: #82ccdd;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #f6b93b, #e55039);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        .cultivation-level {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(246, 185, 59, 0.1);
+            border-radius: 5px;
+            border: 1px solid #f6b93b;
+        }
+        
+        .level {
+            font-size: 1.5rem;
+            color: #f6b93b;
+            font-weight: bold;
+        }
+        
+        .skills-list, .maps-list {
+            list-style-type: none;
+        }
+        
+        .skill, .map {
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid #4a69bd;
+        }
+        
+        .skill:hover, .map:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: #f6b93b;
+        }
+        
+        .skill-name, .map-name {
+            font-weight: bold;
+            color: #82ccdd;
+        }
+        
+        .skill-desc, .map-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .action-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, #4a69bd, #1e3799);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(135deg, #1e3799, #0c2461);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .log {
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .log-time {
+            color: #82ccdd;
+            font-size: 0.8rem;
+        }
+        
+        .event-danger {
+            color: #e55039;
+        }
+        
+        .event-lucky {
+            color: #78e08f;
+        }
+        
+        .event-important {
+            color: #f6b93b;
+        }
+        
+        .inventory {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .item-rare {
+            border: 1px solid #f6b93b;
+            color: #f6b93b;
+        }
+        
+        .item-common {
+            border: 1px solid #4a69bd;
+        }
+        
+        .event-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .event-content {
+            background: linear-gradient(135deg, #1e3799, #0c2461);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #f6b93b;
+            text-align: center;
+        }
+        
+        .event-title {
+            color: #f6b93b;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .event-description {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .event-choices {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .choice-btn {
+            padding: 10px 20px;
+            background: #4a69bd;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .choice-btn:hover {
+            background: #1e3799;
+        }
+        
+        .choice-danger {
+            background: #e55039;
+        }
+        
+        .choice-danger:hover {
+            background: #b71540;
+        }
+        
+        .choice-lucky {
+            background: #78e08f;
+            color: #0c2461;
+        }
+        
+        .choice-lucky:hover {
+            background: #38ada9;
+            color: white;
+        }
+        
+        footer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .inventory {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>凡人修仙传 - 修仙模拟器（增强版）</h1>
+            <p>从凡人开始，踏上修仙之路，步步为营，谨慎前行！</p>
+        </header>
+        
+        <div class="panel character-info">
+            <div class="avatar">
+                <div style="text-align: center; color: #f6b93b; font-size: 0.8rem;">角色头像</div>
+            </div>
+            
+            <div class="cultivation-level">
+                <div>当前境界</div>
+                <div class="level" id="cultivation-level">炼气期 三层</div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat">
+                    <label>生命值 <span id="hp-value">80/100</span></label>
+                    <div class="progress-bar">
+                        <div class="progress" id="hp-bar" style="width: 80%"></div>
+                    </div>
+                </div>
+                
+                <div class="stat">
+                    <label>法力值 <span id="mp-value">65/100</span></label>
+                    <div class="progress-bar">
+                        <div class="progress" id="mp-bar" style="width: 65%"></div>
+                    </div>
+                </div>
+                
+                <div class="stat">
+                    <label>经验值 <span id="exp-value">45/100</span></label>
+                    <div class="progress-bar">
+                        <div class="progress" id="exp-bar" style="width: 45%"></div>
+                    </div>
+                </div>
+                
+                <div class="stat">
+                    <label>神识强度 <span id="sp-value">30/100</span></label>
+                    <div class="progress-bar">
+                        <div class="progress" id="sp-bar" style="width: 30%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 style="width: 100%; margin-top: 15px;">物品栏</h2>
+            <div class="inventory" id="inventory">
+                <div class="item item-common">下品灵石 x5</div>
+                <div class="item item-common">止血草 x3</div>
+                <div class="item item-rare">青元剑诀</div>
+                <div class="item item-common">十年灵芝</div>
+            </div>
+        </div>
+        
+        <div class="panel main-content">
+            <h2>修仙之路</h2>
+            <p>你是一名普通凡人，偶然踏入修仙世界。选择你的道路，谨慎前行...</p>
+            
+            <div class="action-panel">
+                <button class="action-btn" id="action-cultivate">打坐修炼</button>
+                <button class="action-btn" id="action-alchemy">炼制丹药</button>
+                <button class="action-btn" id="action-spell">练习法术</button>
+                <button class="action-btn" id="action-explore">探索地图</button>
+                <button class="action-btn" id="action-dungeon">挑战副本</button>
+                <button class="action-btn" id="action-mission">宗门任务</button>
+            </div>
+            
+            <div class="log" id="game-log">
+                <div class="log-entry">
+                    <span class="log-time">[刚刚]</span> 你加入了七玄门，成为一名外门弟子。
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[1小时前]</span> 你成功突破到炼气期三层。
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[3小时前]</span> 你在后山采集到一株十年灵芝。
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[5小时前]</span> 你学会了基础法术"火球术"。
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">[1天前]</span> 你踏入修仙界，开始了你的修仙之旅。
+                </div>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>功法体系</h2>
+            <ul class="skills-list">
+                <li class="skill" data-skill="qingyuan">
+                    <div class="skill-name">青元剑诀</div>
+                    <div class="skill-desc">木属性功法，修炼后可凝聚青元剑芒</div>
+                </li>
+                <li class="skill" data-skill="dayan">
+                    <div class="skill-name">大衍决</div>
+                    <div class="skill-desc">增强神识的秘术，修炼至高深可分化万千神念</div>
+                </li>
+                <li class="skill" data-skill="sanzhuan">
+                    <div class="skill-name">三转重元功</div>
+                    <div class="skill-desc">多次散功重修，夯实基础，提高结丹几率</div>
+                </li>
+                <li class="skill" data-skill="fansheng">
+                    <div class="skill-name">梵圣真魔功</div>
+                    <div class="skill-desc">魔族顶级功法，修炼后可化身真魔</div>
+                </li>
+                <li class="skill" data-skill="baimai">
+                    <div class="skill-name">百脉炼宝诀</div>
+                    <div class="skill-desc">将自身经脉当作法宝来淬炼的奇特功法</div>
+                </li>
+            </ul>
+            
+            <h2 style="margin-top: 20px;">副本地图</h2>
+            <ul class="maps-list">
+                <li class="map" data-map="qixuan">
+                    <div class="map-name">七玄门</div>
+                    <div class="map-desc">你的起点，江湖小门派，隐藏着修仙机缘</div>
+                </li>
+                <li class="map" data-map="huangfeng">
+                    <div class="map-name">黄枫谷</div>
+                    <div class="map-desc">越国七大修仙门派之一，以炼丹术闻名</div>
+                </li>
+                <li class="map" data-map="xutian">
+                    <div class="map-name">虚天殿</div>
+                    <div class="map-desc">上古修士遗留的秘境，藏有重宝虚天鼎</div>
+                </li>
+                <li class="map" data-map="zhuimo">
+                    <div class="map-name">坠魔谷</div>
+                    <div class="map-desc">古修士战场，危险与机遇并存</div>
+                </li>
+                <li class="map" data-map="lingmiao">
+                    <div class="map-name">灵缈园</div>
+                    <div class="map-desc">破碎空间中的药园，生长着珍稀灵草</div>
+                </li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>凡人修仙传修仙模拟器 - 本程序仅为演示，非官方作品</p>
+            <p>境界体系：炼气 → 筑基 → 金丹 → 元婴 → 化神 → 炼虚 → 合体 → 大乘 → 渡劫 → 真仙</p>
+        </footer>
+    </div>
+
+    <script>
+        // 游戏状态
+        const gameState = {
+            level: 3,
+            maxLevel: 12,
+            hp: 80,
+            maxHp: 100,
+            mp: 65,
+            maxMp: 100,
+            exp: 45,
+            maxExp: 100,
+            sp: 30,
+            maxSp: 100,
+            inventory: [
+                { name: "下品灵石", count: 5, rare: false },
+                { name: "止血草", count: 3, rare: false },
+                { name: "青元剑诀", count: 1, rare: true },
+                { name: "十年灵芝", count: 1, rare: false }
+            ],
+            skills: [],
+            locations: ["七玄门"],
+            cultivationLevels: [
+                "炼气期 一层", "炼气期 二层", "炼气期 三层", "炼气期 四层",
+                "炼气期 五层", "炼气期 六层", "炼气期 七层", "炼气期 八层",
+                "炼气期 九层", "炼气期 十层", "炼气期 十一层", "炼气期 十二层",
+                "筑基期", "金丹期", "元婴期", "化神期", "炼虚期", "合体期", "大乘期", "渡劫期", "真仙"
+            ]
+        };
+
+        // 特殊事件
+        const specialEvents = [
+            {
+                title: "遭遇墨大夫",
+                description: "你在七玄门后山修炼时，偶然遇到了神秘的墨大夫。他眼神阴鸷，似乎对你很感兴趣。",
+                choices: [
+                    { text: "恭敬行礼，请教修炼问题", outcome: "lucky", effect: { exp: 10, mp: -5 } },
+                    { text: "保持警惕，借口离开", outcome: "neutral", effect: { } },
+                    { text: "暗中观察，试图发现他的秘密", outcome: "danger", effect: { hp: -20 } }
+                ]
+            },
+            {
+                title: "发现神秘小瓶",
+                description: "你在一次探索中，偶然发现了一个散发着微弱绿光的奇异小瓶。瓶中有几滴翠绿色的液体。",
+                choices: [
+                    { text: "小心收集液体，进行研究", outcome: "lucky", effect: { exp: 15, item: "神秘小瓶" } },
+                    { text: "不敢轻举妄动，暂时离开", outcome: "neutral", effect: { } },
+                    { text: "直接喝下液体", outcome: "danger", effect: { hp: -30, mp: -20 } }
+                ]
+            },
+            {
+                title: "遭遇妖兽袭击",
+                description: "在你探索山林时，一只凶猛的妖兽突然从树丛中扑出，向你发起攻击！",
+                choices: [
+                    { text: "使用火球术反击", outcome: "danger", effect: { hp: -15, mp: -10, exp: 5 } },
+                    { text: "全力逃跑", outcome: "neutral", effect: { hp: -5, mp: -5 } },
+                    { text: "尝试驯服妖兽", outcome: "danger", effect: { hp: -25 } }
+                ]
+            },
+            {
+                title: "发现古修士洞府",
+                description: "你在悬崖边发现了一个隐蔽的洞府入口，似乎是某位古修士的修炼之地。",
+                choices: [
+                    { text: "谨慎探索洞府", outcome: "lucky", effect: { exp: 20, item: "古修士功法" } },
+                    { text: "标记位置，以后再来", outcome: "neutral", effect: { } },
+                    { text: "强行破开禁制", outcome: "danger", effect: { hp: -20, mp: -15 } }
+                ]
+            },
+            {
+                title: "遭遇其他修士打劫",
+                description: "几名不怀好意的修士拦住了你的去路，要求你交出身上的财物。",
+                choices: [
+                    { text: "奋起反抗", outcome: "danger", effect: { hp: -25, mp: -15, exp: 10 } },
+                    { text: "交出部分财物", outcome: "neutral", effect: { item: "下品灵石", count: -2 } },
+                    { text: "使用遁术逃跑", outcome: "neutral", effect: { mp: -20 } }
+                ]
+            }
+        ];
+
+        // 初始化游戏
+        function initGame() {
+            updateUI();
+            
+            // 添加事件监听器
+            document.querySelectorAll('.action-btn').forEach(button => {
+                button.addEventListener('click', handleAction);
+            });
+            
+            document.querySelectorAll('.skill').forEach(skill => {
+                skill.addEventListener('click', handleSkill);
+            });
+            
+            document.querySelectorAll('.map').forEach(map => {
+                map.addEventListener('click', handleMap);
+            });
+        }
+
+        // 处理行动
+        function handleAction(e) {
+            const action = e.target.id;
+            let message = "";
+            let effect = {};
+            
+            switch(action) {
+                case "action-cultivate":
+                    message = "你打坐修炼了三个时辰，修为略有提升";
+                    effect = { exp: 5, mp: -5 };
+                    break;
+                case "action-alchemy":
+                    message = "你尝试炼制凝气丹，成功炼制出三枚下品丹药";
+                    effect = { exp: 3, mp: -10, item: "凝气丹" };
+                    break;
+                case "action-spell":
+                    message = "你练习火球术，熟练度增加了";
+                    effect = { exp: 3, mp: -8, sp: 2 };
+                    break;
+                case "action-explore":
+                    message = "你在后山探索，发现了一处隐秘山洞";
+                    effect = { exp: 4, hp: -5 };
+                    // 探索有几率触发特殊事件
+                    if (Math.random() < 0.3) {
+                        triggerRandomEvent();
+                        return;
+                    }
+                    break;
+                case "action-dungeon":
+                    message = "你挑战了七玄门试炼，获得了一些修炼资源";
+                    effect = { exp: 8, hp: -15, mp: -12, item: "下品灵石" };
+                    break;
+                case "action-mission":
+                    message = "你完成了宗门杂务，获得10点贡献值";
+                    effect = { exp: 6, hp: -8, mp: -5 };
+                    break;
+            }
+            
+            applyEffect(effect);
+            addLogEntry(message);
+            
+            // 随机触发事件
+            if (Math.random() < 0.2) {
+                triggerRandomEvent();
+            }
+        }
+
+        // 处理功法学习
+        function handleSkill(e) {
+            const skill = e.currentTarget.dataset.skill;
+            const skillName = e.currentTarget.querySelector('.skill-name').textContent;
+            
+            if (!gameState.skills.includes(skill)) {
+                gameState.skills.push(skill);
+                addLogEntry(`你开始参悟《${skillName}》，有所感悟`, "event-important");
+                applyEffect({ exp: 5, mp: -10, sp: 5 });
+            } else {
+                addLogEntry(`你继续修炼《${skillName}》，熟练度提升`, "event-lucky");
+                applyEffect({ exp: 3, mp: -8, sp: 3 });
+            }
+        }
+
+        // 处理地图探索
+        function handleMap(e) {
+            const map = e.currentTarget.dataset.map;
+            const mapName = e.currentTarget.querySelector('.map-name').textContent;
+            
+            if (!gameState.locations.includes(mapName)) {
+                gameState.locations.push(mapName);
+                addLogEntry(`你首次抵达${mapName}，发现新的修炼资源`, "event-lucky");
+                applyEffect({ exp: 10, item: "地图残片" });
+            } else {
+                addLogEntry(`你再次探索${mapName}，遭遇了一些事件`, "event-important");
+                applyEffect({ exp: 5, hp: -8 });
+            }
+            
+            // 地图探索有较高几率触发事件
+            if (Math.random() < 0.5) {
+                triggerRandomEvent();
+            }
+        }
+
+        // 触发随机事件
+        function triggerRandomEvent() {
+            const event = specialEvents[Math.floor(Math.random() * specialEvents.length)];
+            showEventModal(event);
+        }
+
+        // 显示事件模态框
+        function showEventModal(event) {
+            const modal = document.createElement('div');
+            modal.className = 'event-modal';
+            modal.innerHTML = `
+                <div class="event-content">
+                    <h2 class="event-title">${event.title}</h2>
+                    <p class="event-description">${event.description}</p>
+                    <div class="event-choices">
+                        ${event.choices.map((choice, index) => `
+                            <button class="choice-btn ${choice.outcome === 'danger' ? 'choice-danger' : ''} ${choice.outcome === 'lucky' ? 'choice-lucky' : ''}" 
+                                    data-index="${index}">${choice.text}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // 添加选择事件监听
+            modal.querySelectorAll('.choice-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const choiceIndex = parseInt(this.dataset.index);
+                    const choice = event.choices[choiceIndex];
+                    
+                    // 应用选择效果
+                    applyEffect(choice.effect);
+                    
+                    // 添加日志
+                    let outcomeClass = "";
+                    if (choice.outcome === "danger") outcomeClass = "event-danger";
+                    if (choice.outcome === "lucky") outcomeClass = "event-lucky";
+                    if (choice.outcome === "important") outcomeClass = "event-important";
+                    
+                    addLogEntry(`[事件: ${event.title}] 你选择了: ${choice.text}`, outcomeClass);
+                    
+                    // 移除模态框
+                    document.body.removeChild(modal);
+                });
+            });
+        }
+
+        // 应用效果到游戏状态
+        function applyEffect(effect) {
+            if (effect.exp) gameState.exp = Math.min(gameState.maxExp, Math.max(0, gameState.exp + effect.exp));
+            if (effect.hp) gameState.hp = Math.min(gameState.maxHp, Math.max(0, gameState.hp + effect.hp));
+            if (effect.mp) gameState.mp = Math.min(gameState.maxMp, Math.max(0, gameState.mp + effect.mp));
+            if (effect.sp) gameState.sp = Math.min(gameState.maxSp, Math.max(0, gameState.sp + effect.sp));
+            
+            // 处理物品
+            if (effect.item) {
+                const existingItem = gameState.inventory.find(item => item.name === effect.item);
+                if (existingItem) {
+                    existingItem.count += effect.count || 1;
+                } else {
+                    gameState.inventory.push({
+                        name: effect.item,
+                        count: effect.count || 1,
+                        rare: effect.rare || false
+                    });
+                }
+            }
+            
+            // 检查升级
+            checkLevelUp();
+            
+            // 更新UI
+            updateUI();
+            
+            // 检查游戏结束
+            if (gameState.hp <= 0) {
+                setTimeout(() => {
+                    alert("你已陨落！修仙之路充满危险，请更加谨慎行事。游戏将重新开始。");
+                    resetGame();
+                }, 500);
+            }
+        }
+
+        // 检查升级
+        function checkLevelUp() {
+            if (gameState.exp >= gameState.maxExp && gameState.level < gameState.maxLevel) {
+                gameState.level++;
+                gameState.exp = 0;
+                gameState.maxExp = Math.floor(gameState.maxExp * 1.5);
+                gameState.maxHp += 20;
+                gameState.maxMp += 15;
+                gameState.hp = gameState.maxHp;
+                gameState.mp = gameState.maxMp;
+                
+                addLogEntry(`恭喜！你突破到了${gameState.cultivationLevels[gameState.level-1]}！`, "event-lucky");
+            }
+        }
+
+        // 重置游戏
+        function resetGame() {
+            gameState.level = 3;
+            gameState.hp = 80;
+            gameState.maxHp = 100;
+            gameState.mp = 65;
+            gameState.maxMp = 100;
+            gameState.exp = 45;
+            gameState.maxExp = 100;
+            gameState.sp = 30;
+            gameState.maxSp = 100;
+            gameState.inventory = [
+                { name: "下品灵石", count: 5, rare: false },
+                { name: "止血草", count: 3, rare: false },
+                { name: "青元剑诀", count: 1, rare: true },
+                { name: "十年灵芝", count: 1, rare: false }
+            ];
+            gameState.skills = [];
+            gameState.locations = ["七玄门"];
+            
+            document.getElementById('game-log').innerHTML = `
+                <div class="log-entry">
+                    <span class="log-time">[刚刚]</span> 你重生了，开始了新的修仙之旅。
+                </div>
+            `;
+            
+            updateUI();
+        }
+
+        // 更新UI
+        function updateUI() {
+            // 更新境界
+            document.getElementById('cultivation-level').textContent = gameState.cultivationLevels[gameState.level-1];
+            
+            // 更新属性条
+            document.getElementById('hp-bar').style.width = `${(gameState.hp / gameState.maxHp) * 100}%`;
+            document.getElementById('mp-bar').style.width = `${(gameState.mp / gameState.maxMp) * 100}%`;
+            document.getElementById('exp-bar').style.width = `${(gameState.exp / gameState.maxExp) * 100}%`;
+            document.getElementById('sp-bar').style.width = `${(gameState.sp / gameState.maxSp) * 100}%`;
+            
+            // 更新属性值文本
+            document.getElementById('hp-value').textContent = `${gameState.hp}/${gameState.maxHp}`;
+            document.getElementById('mp-value').textContent = `${gameState.mp}/${gameState.maxMp}`;
+            document.getElementById('exp-value').textContent = `${gameState.exp}/${gameState.maxExp}`;
+            document.getElementById('sp-value').textContent = `${gameState.sp}/${gameState.maxSp}`;
+            
+            // 更新物品栏
+            const inventoryEl = document.getElementById('inventory');
+            inventoryEl.innerHTML = gameState.inventory.map(item => `
+                <div class="item ${item.rare ? 'item-rare' : 'item-common'}">${item.name} ${item.count > 1 ? 'x' + item.count : ''}</div>
+            `).join('');
+        }
+
+        // 添加日志条目
+        function addLogEntry(message, className = "") {
+            const log = document.getElementById('game-log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${className}`;
+            
+            const now = new Date();
+            const timeString = `[${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}]`;
+            
+            entry.innerHTML = `<span class="log-time">${timeString}</span> ${message}`;
+            
+            log.insertBefore(entry, log.firstChild);
+            
+            // 限制日志数量
+            if (log.children.length > 8) {
+                log.removeChild(log.lastChild);
+            }
+        }
+
+        // 初始化游戏
+        window.onload = initGame;
+    </script>
+</body>
+</html>
